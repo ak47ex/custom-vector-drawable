@@ -60,7 +60,6 @@ internal sealed class AnimatorAttributeGetter<T>(
                 is AnimatorValue.IntNumber -> AnimatorValue.IntNumber(parser.intAt(index))
                 is AnimatorValue.Path -> AnimatorValue.Path(parser.getAttributeValue(index))
                 AnimatorValue.Undefined -> throw IllegalStateException("Undefined ${attribute.tag} type")
-                null -> throw IllegalStateException()
             }
         }
     }
@@ -130,7 +129,7 @@ internal sealed class AnimatorAttributeGetter<T>(
     protected fun XmlResourceParser.floatAt(index: Int, context: Context): Float =
         dimensionValue(context, getAttributeValue(index))
 
-    private enum class AnimatorAttribute(val tag: String) {
+    protected enum class AnimatorAttribute(val tag: String) {
         INTERPOLATOR("interpolator"),
         DURATION("duration"),
         VALUE_FROM("valueFrom"),
