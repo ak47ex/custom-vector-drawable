@@ -23,13 +23,18 @@ internal fun String.parseColorInt(): Int {
         2 -> {
             Color.parseColor(buildString {
                 append('#')
-                repeat(8) { append(get(1)) }
+                repeat(8) { append(this@parseColorInt[1]) }
             })
         }
         4 -> {
             Color.parseColor(buildString {
                 append('#')
-                append(get(1)); append(get(1)); append(get(2)); append(get(2)); append(get(3)); append(get(3))
+                append(this@parseColorInt[1])
+                append(this@parseColorInt[1])
+                append(this@parseColorInt[2])
+                append(this@parseColorInt[2])
+                append(this@parseColorInt[3])
+                append(this@parseColorInt[3])
             })
         }
         7 -> Color.parseColor(this)
