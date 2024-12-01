@@ -104,7 +104,7 @@ internal class PathElement(
         scaleMatrix.set(prototype.scaleMatrix)
         trimmedPath.set(prototype.trimmedPath)
         strokeRatio = prototype.strokeWidth
-        pathDataNodes = PathParser.deepCopyNodes(prototype.pathDataNodes)
+        pathDataNodes = prototype.pathDataNodes?.let { PathParser.deepCopyNodes(it) }
     }
 
     init {

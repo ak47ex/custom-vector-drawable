@@ -11,19 +11,37 @@ interface AnimationTarget {
         val tag: String,
         private val valueSetter: PropertyValuesHolder.(Array<out Any>) -> Unit
     ) {
-        FILL_COLOR("fillColor", {
-            setIntValues(*(it as Array<Int>).toIntArray())
+        FILL_COLOR("fillColor", { array ->
+            if (array.isPrimitive) {
+                setIntValues(*(array as Array<Int>).toIntArray())
+            } else {
+                setIntValues(*array.filterIsInstance<Int>().toIntArray())
+            }
         }),
-        STROKE_COLOR("strokeColor", {
-            setIntValues(*(it as Array<Int>).toIntArray())
+        STROKE_COLOR("strokeColor", { array ->
+            if (array.isPrimitive) {
+                setIntValues(*(array as Array<Int>).toIntArray())
+            } else {
+                setIntValues(*array.filterIsInstance<Int>().toIntArray())
+            }
         }),
-        STROKE_WIDTH("strokeWidth", {
-            setFloatValues(*(it as Array<Float>).toFloatArray())
+        STROKE_WIDTH("strokeWidth", { array ->
+            if (array.isPrimitive) {
+                setFloatValues(*(array as Array<Float>).toFloatArray())
+            } else {
+                setFloatValues(*array.filterIsInstance<Float>().toFloatArray())
+            }
         }),
-        STROKE_ALPHA("strokeAlpha", {
-            setIntValues(*(it as Array<Int>).toIntArray())
+        STROKE_ALPHA("strokeAlpha", { array ->
+            if (array.isPrimitive) {
+                setIntValues(*(array as Array<Int>).toIntArray())
+            } else {
+                setIntValues(*array.filterIsInstance<Int>().toIntArray())
+            }
         });
 
         fun setValues(pvh: PropertyValuesHolder, vararg values: Any) = valueSetter(pvh, values)
     }
 }
+
+private inline val Array<*>?.isPrimitive: Boolean get() = this?.firstOrNull()?.javaClass?.isPrimitive == true
