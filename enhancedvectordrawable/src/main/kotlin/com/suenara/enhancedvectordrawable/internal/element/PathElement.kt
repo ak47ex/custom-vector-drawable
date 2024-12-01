@@ -72,7 +72,7 @@ internal class PathElement(
         isAntiAlias = true
     }
 
-    private val originalPath: Path = PathParser.createPathFromPathData(pathData).also {
+    private val originalPath: Path = (pathData?.let(PathParser::createPathFromPathData) ?: Path()).also {
         it.fillType = fillType
     }
     private val scaleMatrix: Matrix = Matrix().apply { reset() }

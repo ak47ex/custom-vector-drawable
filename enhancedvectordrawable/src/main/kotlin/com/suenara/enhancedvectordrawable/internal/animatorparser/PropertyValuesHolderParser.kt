@@ -183,7 +183,7 @@ internal class PropertyValuesHolderParser(private val context: Context) {
     }
 
     private fun getPathDataNodes(value: AnimatorValue<*>?): Array<PathDataNode>? {
-        return PathParser.createNodesFromPathData((value as? AnimatorValue.Path)?.value)
+        return (value as? AnimatorValue.Path)?.value?.let(PathParser::createNodesFromPathData)
     }
 
     private fun inferValueTypeOfKeyframe(parser: XmlResourceParser): AnimatorValue<*> {
@@ -273,7 +273,7 @@ internal class PropertyValuesHolderParser(private val context: Context) {
             }
 
             if (!PathParser.canMorph(nodeArray, startValue)) {
-                nodeArray = PathParser.deepCopyNodes(startValue)
+                nodeArray = startValue?.let(PathParser::deepCopyNodes)
             }
             val nodeArray = requireNotNull(nodeArray)
             requireNotNull(startValue)

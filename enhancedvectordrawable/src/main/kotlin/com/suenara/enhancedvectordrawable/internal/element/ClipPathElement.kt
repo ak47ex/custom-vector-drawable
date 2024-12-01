@@ -12,7 +12,7 @@ internal class ClipPathElement(
 ) : AnimationTarget {
     val path by lazy { Path(originalPath) }
 
-    private val originalPath = PathParser.createPathFromPathData(pathData) ?: Path()
+    private val originalPath = pathData?.let(PathParser::createPathFromPathData) ?: Path()
     private val clipPaint = Paint().apply {
         isAntiAlias = true
         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
