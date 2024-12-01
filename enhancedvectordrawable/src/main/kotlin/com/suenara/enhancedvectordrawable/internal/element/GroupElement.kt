@@ -58,7 +58,7 @@ internal class GroupElement(
     private val originalTransformMatrix = Matrix()
     private val finalTransformMatrix = Matrix()
 
-    constructor(prototype: GroupElement) : this(
+    constructor(prototype: GroupElement, parent: GroupElement? = null) : this(
         prototype.name,
         prototype.pivotX,
         prototype.pivotY,
@@ -67,12 +67,22 @@ internal class GroupElement(
         prototype.scaleY,
         prototype.translateX,
         prototype.translateY,
-        prototype.parent?.let { GroupElement(it) },
-        ElementHolderImpl(prototype)
+        parent ?: prototype.parent?.let { GroupElement(it) },
+        ElementHolderImpl()
     ) {
         scaleMatrix.set(prototype.scaleMatrix)
         originalTransformMatrix.set(prototype.originalTransformMatrix)
         finalTransformMatrix.set(prototype.finalTransformMatrix)
+
+        prototype.groupElements.forEach {
+            (groupElements as MutableList).add(GroupElement(it, this))
+        }
+        prototype.pathElements.forEach {
+            (pathElements as MutableList).add(PathElement(it))
+        }
+        prototype.clipPathElements.forEach {
+            (clipPathElements as MutableList).add(ClipPathElement(it))
+        }
     }
 
     fun buildTransformMatrix() {
@@ -103,4 +113,9 @@ internal class GroupElement(
         pathElements.forEach { it.transform(finalTransformMatrix) }
         clipPathElements.forEach { it.transform(finalTransformMatrix) }
     }
+
+    override fun toString(): String {
+        return "GroupElement(name=$name, parent=${parent?.run { "${javaClass.canonicalName}(name=$name)" }}, pivotX=$pivotX, pivotY=$pivotY, rotation=$rotation, scaleX=$scaleX, scaleY=$scaleY, translateX=$translateX, translateY=$translateY, scaleMatrix=$scaleMatrix, originalTransformMatrix=$originalTransformMatrix, finalTransformMatrix=$finalTransformMatrix, groupElements=$groupElements, pathElements=$pathElements, clipPathElements=$clipPathElements)"
+    }
+
 }

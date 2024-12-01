@@ -87,6 +87,37 @@ class MainActivity : AppCompatActivity() {
                     }
                 }, 0, repeatTime)
             })
+
+        findViewById<ImageView>(R.id.animated_gear).apply {
+            setImageResource(R.drawable.gear)
+            Timer().scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        (drawable as Animatable).stop()
+                        (drawable as Animatable).start()
+                    }
+                }
+            }, 0, repeatTime)
+
+        }
+
+        findViewById<ImageView>(R.id.custom_animated_gear).setImageDrawable(
+            EnhancedAnimatedVectorDrawable(
+                this,
+                R.drawable.gear
+            ).also { drawable ->
+                drawable.setFillColor("gear", Color.MAGENTA)
+                drawable.setFillColor("cutout", Color.BLUE)
+                Timer().scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        runOnUiThread{
+                            drawable.stop()
+                            drawable.start()
+                        }
+                    }
+                }, 0, repeatTime)
+            }
+        )
     }
 
     private fun makeAnimated(): StateListDrawable {
